@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+		img{
+			position: absolute;
+			left: 50%;
+			margin-left: -300px;
+		}
+			canvas{
+				position: relative;
+				z-index: 9;
+				background-color: transparent;
+				margin: 20px auto;
+				display: block;
+			}
+
+        </style>
+    </head>
+    <body>
+    <img src="images/fengche.png"  width="500" alt="">
+    <canvas width='800' height='500'></canvas>
+    <script>
+    		var cvs=document.getElementsByTagName('canvas')[0];
+    		var ctx=cvs.getContext("2d");
+			ctx.fillStyle='gray';
+    		ctx.fillRect(0, 0, 800, 500);
+    		ctx.globalCompositeOperation='destination-out';
+    		ctx.lineWidth='45';
+    		ctx.lineCap='round';
+
+    		var x=0,y=0;
+    		cvs.addEventListener('mousedown', function(e){
+    			x=e.layerX;
+    			y=e.layerY;
+    			ctx.moveTo(x,y);
+    		});
+    		cvs.addEventListener('mousemove',function(e){
+    			x=e.layerX;
+    			y=e.layerY;
+    			if(e.which==1){
+    				ctx.lineTo(x,y);
+    				ctx.stroke();
+    				ctx.beginPath();
+    				ctx.moveTo(x,y);
+    			}
+    		});
+    		cvs.addEventListener('mouseup',function(e){
+    			var imageData=ctx.getImageData(0, 0, 800, 500);
+    			var count=0;
+    			for(var i=3;i<imageData.data.length;i+=4){
+    				var a = imageData.data[i];
+    				if(a>=255){
+    					count++;
+    				}
+    			}
+
+
+    			var temp=count/(800*600);
+    			console.log(temp);
+    			if(temp<0.6){
+
+    				ctx.clearRect(0,0,800,500);
+    			}
+    		})
+
+
+    </script>
+    </body>
+</html>
